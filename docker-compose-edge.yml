@@ -3,6 +3,7 @@ version: '3'
 services:
   prometheus:
     image: prom/prometheus:latest
+    platform: linux/arm64
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -11,7 +12,8 @@ services:
       - "9090:9090"
 
   grafana:
-    image: grafana/grafana:latest-arm64
+    image: grafana/grafana:latest
+    platform: linux/arm64
     container_name: grafana
     volumes:
       - grafana_data:/var/lib/grafana
@@ -21,7 +23,8 @@ services:
       - prometheus
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor-arm64:latest
+    image: gcr.io/cadvisor/cadvisor:latest
+    platform: linux/arm64
     container_name: cadvisor
     ports:
       - "9323:8080"
