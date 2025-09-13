@@ -11,16 +11,31 @@ services:
     ports:
       - "9090:9090"
 
-  grafana:
-    image: grafana/grafana:latest
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   platform: linux/arm64
+  #   container_name: grafana
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - prometheus
+  node_exporter:
+    image: prom/node-exporter:latest
     platform: linux/arm64
-    container_name: grafana
-    volumes:
-      - grafana_data:/var/lib/grafana
+    container_name: node_exporter
     ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
+      - "9100:9100"
+    pid: "host"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -36,4 +51,4 @@ services:
 
 volumes:
   prometheus_data:
-  grafana_data:
+  # grafana_data:
